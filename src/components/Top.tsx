@@ -1,13 +1,11 @@
-import Accuracy from "./Accuracy";
+import Proficiency from "./Proficiency";
 import Reset from "./Reset";
-import Speed from "./Speed";
 import Timer from "./Timer";
 
 const Top = () => {
   return (
-    <div className="">
-      <Speed />
-      <Accuracy />
+    <div className="flex">
+      <Proficiency />
       <Timer />
       <Reset />
     </div>
