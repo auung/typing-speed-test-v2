@@ -19,8 +19,8 @@ const useTypingStatusStore = create<TypingStatus>()(immer((set) => ({
   setWpm: (wpm: TypingStatus["wpm"]) => set({ wpm }),
   setAccuracy: (accuracy: TypingStatus["accuracy"]) => set({ accuracy }),
   setTime: (time: TypingStatus["time"]) => set({ time }),
-  incTime: () => set((state) => state.time += 1),
-  decTime: () => set((state) => state.time -= 1),
+  incTime: () => set((state) => state.time += 30),
+  decTime: () => set((state) => state.time -= 30),
 })))
 
 export default useTypingStatusStore;

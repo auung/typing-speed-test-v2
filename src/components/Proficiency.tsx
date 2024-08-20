@@ -8,7 +8,7 @@ type LayoutProps = {
 const Layout = ({ title, value }: LayoutProps) => {
   return (
     <div className="flex items-end">
-      <span>{ title }: </span>
+      <span className="mr-1">{ title }: </span>
       <span className="text-2xl">{ value }</span>
     </div>
   )

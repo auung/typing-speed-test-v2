@@ -8,11 +8,11 @@ type FetchStatus = {
   setError: (error: FetchStatus["error"]) => void;
 }
 
-const useStore = create<FetchStatus>()(immer((set) => ({
+const useFetchStatusStore = create<FetchStatus>()(immer((set) => ({
   isLoading: false,
   error: "",
   setLoading: (isLoading: FetchStatus["isLoading"]) => set({ isLoading }),
   setError: (error: FetchStatus["error"]) => set({ error }),
 })))
 
-export default useStore;
+export default useFetchStatusStore;
