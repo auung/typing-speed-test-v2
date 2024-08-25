@@ -6,10 +6,9 @@ function parseData(data: string): Letter[] {
   for (let i = 0; i <= temp.length; i++) {
     const id = i;
     const letter = temp[i];
-    const isCurrent = i === 0;
-    const isCorrect = false;
+    const status = i === 0 ? "current" : "";
 
-    array.push({id, letter, isCurrent, isCorrect});
+    array.push({id, letter, status});
   }
   return array;
 }

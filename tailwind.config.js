@@ -8,7 +8,17 @@ export default {
     fontFamily: {
       mono: ["Oxygen Mono", "monospace"]
     },
-    extend: {},
+    extend: {
+      animation: {
+        cursorBlink: "cursorBlink 0.6s ease-in-out alternate infinite"
+      },
+      keyframes: {
+        cursorBlink: {
+          "0%": { borderBottom: "#000000 4px solid"},
+          "100%": { borderBottom: "none"},
+        }
+      }
+    },
   },
   plugins: [],
 }

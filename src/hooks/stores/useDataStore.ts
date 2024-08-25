@@ -11,7 +11,8 @@ export type Data = {
   setRenderData: (renderData: Data["renderData"]) => void,
   setRawData: (rawData: Data["rawData"]) => void,
   setLengthArr: (lengthArr: Data["lengthArr"]) => void,
-  setCorrect: (id: number, isCorrect: Letter["isCorrect"]) => void,
+  setStatus: (id: number, isCorrect: boolean) => void,
+  goBack: (id: number) => void,
 }
 
 const useDataStore = create<Data>()(immer((set) => ({
@@ -23,11 +24,24 @@ const useDataStore = create<Data>()(immer((set) => ({
   setRenderData: (renderData: Data["renderData"]) => set({ renderData }),
   setRawData: (rawData: Data["rawData"]) => set({ rawData }),
   setLengthArr: (lengthArr: Data["lengthArr"]) => set({ lengthArr }),
-  setCorrect: (id: number, isCorrect: Letter["isCorrect"]) => set((draft) => {
+  setStatus: (id: number, isCorrect: boolean) => set((draft) => {
     const item = draft.data.find((item: Letter) => item.id === id);
     if (item) {
-      item.isCurrent = false;
-      item.isCorrect = isCorrect;
+      item.status = isCorrect ? "correct" : "incorrect";
+      const nextItem = draft.data.find((item: Letter) => item.id === id + 1);
+      if (nextItem) {
+        nextItem.status = "current";
+      }
+    }
+  }),
+  goBack: (id: number) => set((draft) => {
+    const item = draft.data.find((item: Letter) => item.id === id);
+    if (item) {
+      item.status = "current";
+      const nextItem = draft.data.find((item: Letter) => item.id === id + 1);
+      if (nextItem) {
+        nextItem.status = "";
+      }
     }
   }),
 })))
