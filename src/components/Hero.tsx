@@ -7,7 +7,7 @@ const Hero = () => {
   const isLoading = useFetchStatusStore((state) => state.isLoading);
 
   return (
-    <div>
+    <div className="relative">
       { isLoading && <p>Loading...</p> }
       { rawData && <Input />}
     </div>

@@ -1,7 +1,5 @@
-function splitParagraph(paragraph: string, containerWidth: number, fontSize: number): string[] {
-  const maxLetters = Math.floor(containerWidth / fontSize);
-  console.log(maxLetters);
-  
+function splitParagraph(paragraph: string, containerWidth: number, fontSize: number): number[] {
+  const maxLetters = Math.floor(containerWidth / fontSize); 
   const words = paragraph.split(' ');
   const lines = [];
   let currentLine = '';
@@ -23,7 +21,7 @@ function splitParagraph(paragraph: string, containerWidth: number, fontSize: num
   if (currentLine.length > 0) {
     lines.push(currentLine);
   }
-  return lines;
+  return lines.map(v => v.length);
 }
 
 export default splitParagraph;

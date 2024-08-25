@@ -8,27 +8,18 @@ import useFetchQuery from "./hooks/useFetchQuery";
 const App = () => {
   useFetchQuery("https://paragraphs.vercel.app/2fE1xnT58");
 
-  const splitData = useDataStore((state) => state.splitData);
-  // const renderData = useDataStore((state) => state.renderData);
+  const lengthArr = useDataStore((state) => state.lengthArr);
   const setRenderData = useDataStore((state) => state.setRenderData);
 
   useEffect(() => {
-    const dupe =  [...useDataStore.getState().data];
-    const parsedSplitArr: Data["renderData"] = [];
+    const dupe =  [...useDataStore.getState().data].map(v => v.id);
+    const newRenderData: Data["renderData"] = [];
 
-    splitData.forEach((item, index) => {
-      parsedSplitArr.push({
-        id: index,
-        array: dupe.splice(0, item.length)
-      })
+    lengthArr.forEach(item => {
+      newRenderData.push(dupe.splice(0, item))
     })
-    setRenderData(parsedSplitArr);
-  }, [setRenderData, splitData]);
-
-  // useEffect(() => {
-  //   console.log(renderData);
-    
-  // }, [renderData]);
+    setRenderData(newRenderData);
+  }, [lengthArr, setRenderData]);
 
   return (
     <div className="container mx-auto w-3/4 font-mono">

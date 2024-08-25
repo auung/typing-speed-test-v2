@@ -12,10 +12,10 @@ type Size = {
 const useSizeStore = create<Size>()(immer(() => ({
   width: 0,
   setWidth: (width: Size["width"]) => {
-    const textArr = splitParagraph(useDataStore.getState().rawData, width, 14.4);
-    const currentArr = useDataStore.getState().splitData;
-    if (!compareArrays(textArr, currentArr)) {    
-      useDataStore.getState().setSplitData(textArr);
+    const lengthArr = splitParagraph(useDataStore.getState().rawData, width, 14.4);
+    const currentLengthArr = useDataStore.getState().lengthArr;
+    if (!compareArrays(lengthArr, currentLengthArr)) {
+      useDataStore.getState().setLengthArr(lengthArr);
     }
   }
 })))
