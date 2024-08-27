@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useDataStore from "../hooks/stores/useDataStore";
 import useSizeStore from "../hooks/stores/useSizeStore";
 import getElementWidth from "../utils/getElementWidth";
 import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
+import useTimerStore from "../hooks/stores/useTimerStore";
 
 const Input = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,6 +19,8 @@ const Input = () => {
   const setStatus = useDataStore((state) => state.setStatus);
   const goBack = useDataStore((state) => state.goBack);
   const setWidth = useSizeStore((state) => state.setWidth);
+  const timer = useTimerStore((state) => state.timer);
+  const setOnExpire = useTimerStore((state) => state.setOnExpire);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -72,6 +75,14 @@ const Input = () => {
     }
   }
 
+  const handleTimerExpire = useCallback(() => {
+    console.log("timer expired");
+  }, [])
+
+  useEffect(() => {
+    setOnExpire(handleTimerExpire);
+  }, [handleTimerExpire, setOnExpire]);
+
   return (
     <>
       <div className="h-40 bg-gray-400 overflow-hidden px-6 py-2 cursor-text" ref={containerRef} onClick={handleContainerClick}>
@@ -99,7 +110,12 @@ const Input = () => {
           className="w-0 h-0 opacity-0 absolute top-0 left-0"
           ref={inputRef}
           value={txtInput}
-          onChange={(e) => setTxtInput(e.target.value)}
+          onChange={(e) => {
+            setTxtInput(e.target.value);
+            if (!timer.isRunning) {
+              timer.start();
+            }
+          }}
         />
     </>
     
