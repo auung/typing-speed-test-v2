@@ -1,29 +1,38 @@
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
 
 type Timer = {
+  initialSeconds: number,
   timer: {
-    initialSeconds: number,
     totalSeconds: number,
     isRunning: boolean,
-    start: () => void,
-    restart: (newExpiryTimestamp: Date, autoStart: boolean) => void
+    start: VoidFunction,
   },
   onExpire: () => void,
+  setInitialSeconds: (initialSeconds: Timer["initialSeconds"]) => void,
   setTimer: (timer: Timer["timer"]) => void,
   setOnExpire: (onExpire: Timer["onExpire"]) => void,
+  increaseTimer: () => void,
+  decreaseTimer: () => void
 }
 
-const useTimerStore = create<Timer>((set) => ({
+const useTimerStore = create<Timer>()(immer((set) => ({
+  initialSeconds: 60,
   timer: {
-    initialSeconds: 0,
     totalSeconds: 0,
     isRunning: false,
     start: () => {},
-    restart: () => {},
   },
   onExpire: () => {},
+  setInitialSeconds: (initialSeconds: Timer["initialSeconds"]) => set({ initialSeconds }),
   setTimer: (timer: Timer["timer"]) => set({ timer }),
-  setOnExpire: (onExpire: Timer["onExpire"]) => set({ onExpire })
-}))
+  setOnExpire: (onExpire: Timer["onExpire"]) => set({ onExpire }),
+  increaseTimer: () => set((draft) => {
+    draft.initialSeconds += 30;
+  }),
+  decreaseTimer: () => set((draft) => {
+    draft.initialSeconds -= 30;
+  }),
+})))
 
 export default useTimerStore;

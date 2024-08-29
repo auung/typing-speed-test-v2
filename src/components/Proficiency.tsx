@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import useDataStore from "../hooks/stores/useDataStore";
 import useTypingStatusStore from "../hooks/stores/useTypingStatusStore";
 import useTimerStore from "../hooks/stores/useTimerStore";
@@ -14,7 +13,7 @@ const Layout = ({ title, value }: LayoutProps) => {
   return (
     <div className="flex items-end">
       <span className="mr-1">{ title }: </span>
-      <span className="text-2xl">{ value }</span>
+      <span className="text-3xl">{ value }</span>
     </div>
   )
 }
@@ -26,15 +25,17 @@ const Proficiency = () => {
   const setWpm = useTypingStatusStore((state) => state.setWpm);
   const setAccuracy = useTypingStatusStore((state) => state.setAccuracy);
   const data = useDataStore((state) => state.data);
+  const initialSeconds = useTimerStore((state) => state.initialSeconds);
   const timer = useTimerStore((state) => state.timer);
 
   useDidUpdateEffect(() => {
-    if (timer.totalSeconds % interval === 0) {
+    if (timer && timer.totalSeconds % interval === 0) {
       const letterCount = data.findIndex(letter => letter.status === "current");
       const errorCount = data.filter(letter => letter.status === "incorrect").length;
 
       if (letterCount && letterCount > 1) {
-        const elapsedTime = timer.initialSeconds - timer.totalSeconds;
+        const elapsedTime = initialSeconds - timer.totalSeconds;
+        console.log(initialSeconds, timer.totalSeconds);
         const wpm = calcSpeed(letterCount, elapsedTime) - errorCount;
         const accuracy = (letterCount - errorCount) * 100 / letterCount;
         setWpm(Math.round(wpm));

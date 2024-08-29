@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-function useDidUpdateEffect(fn: VoidFunction, inputs: (string|number)[]) {
+function useDidUpdateEffect(fn: VoidFunction, inputs: (string|number|boolean|VoidFunction|undefined)[]) {
   const didMountRef = useRef(true);
 
   useEffect(() => {

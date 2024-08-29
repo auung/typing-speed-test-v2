@@ -11,7 +11,7 @@ export type Data = {
   setRenderData: (renderData: Data["renderData"]) => void,
   setRawData: (rawData: Data["rawData"]) => void,
   setLengthArr: (lengthArr: Data["lengthArr"]) => void,
-  setStatus: (id: number, isCorrect: boolean) => void,
+  setStatus: (id: number, isCorrect: string) => void,
   goBack: (id: number) => void,
 }
 
@@ -24,12 +24,12 @@ const useDataStore = create<Data>()(immer((set) => ({
   setRenderData: (renderData: Data["renderData"]) => set({ renderData }),
   setRawData: (rawData: Data["rawData"]) => set({ rawData }),
   setLengthArr: (lengthArr: Data["lengthArr"]) => set({ lengthArr }),
-  setStatus: (id: number, isCorrect: boolean) => set((draft) => {
+  setStatus: (id: number, isCorrect: string) => set((draft) => {
     const item = draft.data.find((item: Letter) => item.id === id);
     if (item) {
-      item.status = isCorrect ? "correct" : "incorrect";
+      item.status = isCorrect;
       const nextItem = draft.data.find((item: Letter) => item.id === id + 1);
-      if (nextItem) {
+      if (isCorrect !== "" && nextItem) {
         nextItem.status = "current";
       }
     }

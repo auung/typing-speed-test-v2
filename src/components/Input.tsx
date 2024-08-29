@@ -33,7 +33,7 @@ const Input = () => {
   useDidUpdateEffect(() => {
     if (txtInput.length - 1 === counterRef.current) {
       const isCorrect = txtInput[counterRef.current] === data[counterRef.current].letter;
-      setStatus(data[counterRef.current].id, isCorrect);
+      setStatus(data[counterRef.current].id, isCorrect ? "correct" : "incorrect");
       counterRef.current++;
     } else {
       counterRef.current--;
@@ -76,8 +76,11 @@ const Input = () => {
   }
 
   const handleTimerExpire = useCallback(() => {
-    console.log("timer expired");
-  }, [])
+    if (inputRef.current) {
+      inputRef.current.disabled = true;
+    }
+    setStatus(data[counterRef.current].id, "");
+  }, [data, setStatus])
 
   useEffect(() => {
     setOnExpire(handleTimerExpire);
