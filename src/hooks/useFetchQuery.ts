@@ -17,11 +17,12 @@ const useFetchQuery = (url: string) => {
   const setRawData = useDataStore((state) => state.setRawData);
   const setLoading = useFetchStatusStore((state) => state.setLoading);
   const setError = useFetchStatusStore((state) => state.setError);
+  const setRefetch = useFetchStatusStore((state) => state.setRefetch);
 
-  const { isLoading, isError, data, error, isSuccess } = useQuery({
+  const { isLoading, isError, data, error, isSuccess, refetch } = useQuery({
     queryKey: ["paragraph"],
     queryFn: () => fetchData(url),
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false
   })
 
   useEffect(() => {
@@ -40,13 +41,14 @@ const useFetchQuery = (url: string) => {
       console.log("fetch success");
       const rawData = data[0].content;
       setRawData(rawData);
+      setRefetch(refetch);
 
       const parsedData = parseData(rawData);
       setData(parsedData);
-      
+      // console.log(parsedData);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, data, isLoading, isError, isSuccess]);
+
+  }, [url, data, isLoading, isError, isSuccess, setLoading, setError, error?.message, setRawData, setRefetch, refetch, setData]);
 }
 
 export default useFetchQuery;

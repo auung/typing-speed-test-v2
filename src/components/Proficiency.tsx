@@ -35,7 +35,6 @@ const Proficiency = () => {
 
       if (letterCount && letterCount > 1) {
         const elapsedTime = initialSeconds - timer.totalSeconds;
-        console.log(initialSeconds, timer.totalSeconds);
         const wpm = calcSpeed(letterCount, elapsedTime) - errorCount;
         const accuracy = (letterCount - errorCount) * 100 / letterCount;
         setWpm(Math.round(wpm));

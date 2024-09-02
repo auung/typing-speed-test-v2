@@ -7,12 +7,17 @@ export type Data = {
   renderData: number[][],
   rawData: string,
   lengthArr: number[],
+  inputData: string,
+  currentLetter: number,
   setData: (data: Data["data"]) => void,
   setRenderData: (renderData: Data["renderData"]) => void,
   setRawData: (rawData: Data["rawData"]) => void,
   setLengthArr: (lengthArr: Data["lengthArr"]) => void,
   setStatus: (id: number, isCorrect: string) => void,
   goBack: (id: number) => void,
+  resetData: () => void,
+  setCurrentLetter: (currentLetter: Data["currentLetter"]) => void,
+  setInputData: (inputData: Data["inputData"]) => void,
 }
 
 const useDataStore = create<Data>()(immer((set) => ({
@@ -20,6 +25,8 @@ const useDataStore = create<Data>()(immer((set) => ({
   renderData: [],
   rawData: "",
   lengthArr: [],
+  inputData: "",
+  currentLetter: 0,
   setData: (data: Data["data"]) => set({ data }),
   setRenderData: (renderData: Data["renderData"]) => set({ renderData }),
   setRawData: (rawData: Data["rawData"]) => set({ rawData }),
@@ -44,6 +51,9 @@ const useDataStore = create<Data>()(immer((set) => ({
       }
     }
   }),
+  setCurrentLetter: (currentLetter: Data["currentLetter"]) => set({ currentLetter }),
+  setInputData: (inputData: Data["inputData"]) => set({ inputData }),
+  resetData: () => set({ data: [] })
 })))
 
 export default useDataStore;
