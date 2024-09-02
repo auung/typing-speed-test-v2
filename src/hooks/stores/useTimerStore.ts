@@ -9,21 +9,24 @@ type Timer = {
     start: VoidFunction,
   },
   onExpire: () => void,
+  onResetFuncs: (() => void)[],
   setInitialSeconds: (initialSeconds: Timer["initialSeconds"]) => void,
   setTimer: (timer: Timer["timer"]) => void,
   setOnExpire: (onExpire: Timer["onExpire"]) => void,
   increaseTimer: () => void,
-  decreaseTimer: () => void
+  decreaseTimer: () => void,
+  addOnResetFunc: (reset: Timer["onResetFuncs"][0]) => void,
 }
 
 const useTimerStore = create<Timer>()(immer((set) => ({
-  initialSeconds: 60,
+  initialSeconds: 6,
   timer: {
     totalSeconds: 0,
     isRunning: false,
     start: () => {},
   },
   onExpire: () => {},
+  onResetFuncs: [],
   setInitialSeconds: (initialSeconds: Timer["initialSeconds"]) => set({ initialSeconds }),
   setTimer: (timer: Timer["timer"]) => set({ timer }),
   setOnExpire: (onExpire: Timer["onExpire"]) => set({ onExpire }),
@@ -32,6 +35,9 @@ const useTimerStore = create<Timer>()(immer((set) => ({
   }),
   decreaseTimer: () => set((draft) => {
     draft.initialSeconds -= 30;
+  }),
+  addOnResetFunc: (reset: Timer["onResetFuncs"][0]) => set((draft) => {
+    draft.onResetFuncs.push(reset);
   }),
 })))
 

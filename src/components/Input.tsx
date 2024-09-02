@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import useDataStore from "../hooks/stores/useDataStore";
 import useSizeStore from "../hooks/stores/useSizeStore";
 import getElementWidth from "../utils/getElementWidth";
@@ -9,19 +9,20 @@ const Input = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLParagraphElement[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const counterRef = useRef<number>(0);
   const currentLineRef = useRef<number>(0);
 
-  const inputData = useDataStore((state) => state.inputData);
-  const setInputData = useDataStore((state) => state.setInputData);
-  const currentLetter = useDataStore((state) => state.currentLetter);
-  const setCurrentLetter = useDataStore((state) => state.setCurrentLetter);
+  const [txtInput, setTxtInput] = useState("");
+
   const data = useDataStore((state) => state.data);
+  const setData = useDataStore((state) => state.setData);
   const renderData = useDataStore((state) => state.renderData);
   const setStatus = useDataStore((state) => state.setStatus);
   const goBack = useDataStore((state) => state.goBack);
   const setWidth = useSizeStore((state) => state.setWidth);
   const timer = useTimerStore((state) => state.timer);
   const setOnExpire = useTimerStore((state) => state.setOnExpire);
+  const addOnResetFunc = useTimerStore((state) => state.addOnResetFunc);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -34,19 +35,19 @@ const Input = () => {
 
   useDidUpdateEffect(() => {
     if (data.length > 0) {
-      if (inputData.length >= currentLetter) {
-        const isCorrect = inputData[currentLetter] === data[currentLetter].letter;
-        setStatus(data[currentLetter].id, isCorrect ? "correct" : "incorrect");
-        if (inputData.length !== 0) {
-          setCurrentLetter(currentLetter + 1);
+      if (txtInput.length >= counterRef.current) {
+        const isCorrect = txtInput[counterRef.current] === data[counterRef.current].letter;
+        setStatus(data[counterRef.current].id, isCorrect ? "correct" : "incorrect");
+        if (txtInput.length !== 0) {
+          counterRef.current += 1;
         }
       } else {
-        setCurrentLetter(currentLetter - 1);
-        goBack(currentLetter - 1);
+        counterRef.current -= 1;
+        goBack(counterRef.current);
       }
 
       for (let i = 0; i < renderData.length; i++) {
-        if (renderData[i].includes(data[currentLetter].id)) {
+        if (renderData[i].includes(data[counterRef.current].id)) {
           if (i !== currentLineRef.current) {
             currentLineRef.current = i;
             scrollContainer(i);
@@ -55,8 +56,7 @@ const Input = () => {
         }
       }
     }
-    
-  }, [inputData]);
+  }, [txtInput]);
 
   window.addEventListener("resize", () => {
     if (containerRef.current) {
@@ -82,18 +82,26 @@ const Input = () => {
     }
   }
 
-  const handleTimerExpire = useCallback(() => {
-    if (inputRef.current) {
-      inputRef.current.disabled = true;
-    }
-    setStatus(data[currentLetter].id, "");
-
+  useEffect(() => {
+    setOnExpire(() => {
+      if (inputRef.current) {
+        inputRef.current.disabled = true;
+      }
+      setStatus(data[counterRef.current].id, "");
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, setStatus])
+  }, [setOnExpire, setStatus]);
 
   useEffect(() => {
-    setOnExpire(handleTimerExpire);
-  }, [handleTimerExpire, setOnExpire]);
+    addOnResetFunc(() => {
+      setData([]);
+      setTxtInput("");
+      counterRef.current = 0;
+      if (inputRef.current) {
+        inputRef.current.disabled = false;
+      }
+    });
+  }, [addOnResetFunc, setData])
 
   useEffect(() => {
     console.count('counter');
@@ -122,17 +130,17 @@ const Input = () => {
         }) }
       </div>
       <input
-          type="text"
-          className="w-0 h-0 opacity-0 absolute top-0 left-0"
-          ref={inputRef}
-          value={inputData}
-          onChange={(e) => {
-            setInputData(e.target.value);
-            if (!timer.isRunning) {
-              timer.start();
-            }
-          }}
-        />
+        type="text"
+        className="w-0 h-0 opacity-0 absolute top-0 left-0"
+        ref={inputRef}
+        value={txtInput}
+        onChange={(e) => {
+          setTxtInput(e.target.value);
+          if (!timer.isRunning) {
+            timer.start();
+          }
+        }}
+      />
     </>
     
   );
