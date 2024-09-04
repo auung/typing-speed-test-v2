@@ -19,7 +19,7 @@ type Timer = {
 }
 
 const useTimerStore = create<Timer>()(immer((set) => ({
-  initialSeconds: 6,
+  initialSeconds: 60,
   timer: {
     totalSeconds: 0,
     isRunning: false,

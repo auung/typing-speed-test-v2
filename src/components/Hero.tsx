@@ -3,15 +3,15 @@ import useFetchStatusStore from "../hooks/stores/useFetchStatusStore";
 import Input from "./Input";
 
 const Hero = () => {
-  const rawData = useDataStore((state) => state.rawData);
+  const data = useDataStore((state) => state.data);
   const isLoading = useFetchStatusStore((state) => state.isLoading);
 
   return (
     <div className="relative">
       { isLoading && <p>Loading...</p> }
-      { rawData && <Input />}
+      { data && data.length > 0 && <Input />}
     </div>
   );
 }
- 
+
 export default Hero;

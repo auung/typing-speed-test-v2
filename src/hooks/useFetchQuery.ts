@@ -19,25 +19,21 @@ const useFetchQuery = (url: string) => {
   const setError = useFetchStatusStore((state) => state.setError);
   const setRefetch = useFetchStatusStore((state) => state.setRefetch);
 
-  const { isLoading, isError, data, error, isSuccess, refetch } = useQuery({
+  const { isFetching, isError, data, error, isSuccess, refetch } = useQuery({
     queryKey: ["paragraph"],
     queryFn: () => fetchData(url),
     refetchOnWindowFocus: false
   })
 
   useEffect(() => {
-    if (isLoading) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
+    setLoading(isFetching);
   
     if (isError) {
       console.log("fetch error");
       setError(error.message);
     }
   
-    if (isSuccess) {
+    if (isSuccess && !isFetching) {
       console.log("fetch success");
       const rawData = data[0].content;
       setRawData(rawData);
@@ -45,10 +41,10 @@ const useFetchQuery = (url: string) => {
 
       const parsedData = parseData(rawData);
       setData(parsedData);
-      // console.log(parsedData);
     }
 
-  }, [url, data, isLoading, isError, isSuccess, setLoading, setError, error?.message, setRawData, setRefetch, refetch, setData]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching, isError, data, error, isSuccess, refetch]);
 }
 
 export default useFetchQuery;
