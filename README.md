@@ -1,6 +1,7 @@
 # Typing Speed Test v2
 
 This is the new version of Typing Speed Test that I created some time ago, This version is created to practice React with TypeScript, and uses the same Paragraph API as the older version.
+Live site: <https://typing-speed-test-v2.vercel.app/>
 
 ## Tech
 
