@@ -36,7 +36,6 @@ const Input = () => {
 
   useDidUpdateEffect(() => {
     if (data.length > 0 && txtInput.length < data.length) {
-      console.log(`${txtInput.length} ${data.length}`);
       if (txtInput.length >= counterRef.current) {
         const isCorrect = txtInput[counterRef.current] === data[counterRef.current].letter;
         setStatus(data[counterRef.current].id, isCorrect ? "correct" : "incorrect");
@@ -104,10 +103,6 @@ const Input = () => {
       }
     });
   }, [addOnResetFunc, setData])
-
-  useEffect(() => {
-    console.log(inputRef.current === document.activeElement);
-  })
 
   return (
     <>
