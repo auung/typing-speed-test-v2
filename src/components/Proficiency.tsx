@@ -5,20 +5,6 @@ import calcSpeed from "../utils/calcSpeed";
 import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
 import { useEffect } from "react";
 
-type LayoutProps = {
-  title: string,
-  value: number
-}
-
-const Layout = ({ title, value }: LayoutProps) => {
-  return (
-    <div className="flex items-end">
-      <span className="mr-1">{ title }: </span>
-      <span className="text-3xl">{ value }</span>
-    </div>
-  )
-}
-
 const Proficiency = () => {
   const interval = 2;
   const wpm = useTypingStatusStore((state) => state.wpm);
@@ -41,8 +27,8 @@ const Proficiency = () => {
         if (elapsedTime !== 0) {
           const wpm = Math.round(calcSpeed(letterCount, elapsedTime) - errorCount);
           const accuracy = (letterCount - errorCount) * 100 / letterCount;
-          setWpm(Number.isFinite(wpm) ? wpm : 0);
-          setAccuracy(Math.floor(accuracy));
+          setWpm(Number.isFinite(wpm) && wpm >= 0 ? wpm : 0);
+          setAccuracy(Math.floor(accuracy >= 0 ? accuracy : 0));
         }
       }
     }
@@ -57,8 +43,14 @@ const Proficiency = () => {
 
   return (
     <div className="flex gap-8">
-      <Layout title="WPM" value={wpm} />
-      <Layout title="ACC" value={accuracy} />
+      <div className="flex items-end">
+        <span className="mr-1">WPM: </span>
+        <span className="text-3xl">{ wpm }</span>
+      </div>
+      <div className="flex items-end">
+        <span className="mr-1">ACC: </span>
+        <span className="text-3xl">{ accuracy }%</span>
+      </div>
     </div>
   );
 }

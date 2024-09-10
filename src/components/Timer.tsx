@@ -58,9 +58,9 @@ const Timer = () => {
   return (
     <div className="flex items-center gap-8">
       <div className="flex items-center justify-center gap-2 w-[172px]">
-        { !timer.isRunning && <button className="material-symbols-outlined" onClick={handleDecreaseTimer}>remove</button> }
-        <span className="text-4xl">{ formatTime(timer.totalSeconds) }</span>
-        { !timer.isRunning && <button className="material-symbols-outlined" onClick={handleIncreaseTimer}>add</button> }
+        { !timer.isRunning && initialSeconds > 30 && <button className="material-symbols-outlined" onClick={handleDecreaseTimer}>remove</button> }
+        <span className={"text-4xl " + (initialSeconds > 30 ? "mr-auto" : "") + (initialSeconds < 300 ? "ml-auto" : "")}>{ formatTime(timer.totalSeconds) }</span>
+        { !timer.isRunning && initialSeconds < 300 && <button className="material-symbols-outlined" onClick={handleIncreaseTimer}>add</button> }
       </div>
       <button className="material-symbols-outlined text-4xl" onClick={handleReset}>refresh</button>
     </div>

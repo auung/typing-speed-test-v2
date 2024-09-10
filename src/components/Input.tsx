@@ -34,7 +34,8 @@ const Input = () => {
   }, [data]);
 
   useDidUpdateEffect(() => {
-    if (data.length > 0) {
+    if (data.length > 0 && txtInput.length < data.length) {
+      console.log(`${txtInput.length} ${data.length}`);
       if (txtInput.length >= counterRef.current) {
         const isCorrect = txtInput[counterRef.current] === data[counterRef.current].letter;
         setStatus(data[counterRef.current].id, isCorrect ? "correct" : "incorrect");
@@ -103,13 +104,13 @@ const Input = () => {
     });
   }, [addOnResetFunc, setData])
 
-  useEffect(() => {
-    console.count('counter');
-  })
+  // useEffect(() => {
+  //   console.count('counter');
+  // })
 
   return (
     <>
-      <div className="h-40 bg-gray-400 overflow-hidden px-6 py-2 cursor-text" ref={containerRef} onClick={handleContainerClick}>
+      <div className="h-40 bg-gray-300 overflow-hidden px-6 py-2 cursor-text" ref={containerRef} onClick={handleContainerClick}>
         { data && renderData && data.length === renderData.reduce((prev, curr) => prev + curr.length, 1) && renderData.map((line, index) => {
           return (
             <p key={index} className="text-2xl leading-loose" ref={el => assignRef(index, el)}>
@@ -118,8 +119,8 @@ const Input = () => {
                   <span
                     key={ id }
                     className={
-                      data[id].status === "correct" ? "bg-green-300" : 
-                      data[id].status === "incorrect" ? "bg-red-400" :
+                      data[id].status === "correct" ? "bg-green-400" : 
+                      data[id].status === "incorrect" ? "bg-red-400" : 
                       data[id].status === "current" ? "animate-cursorBlink" : ""
                     }
                   >{ data[id].letter }</span>
