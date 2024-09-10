@@ -13,6 +13,7 @@ const Input = () => {
   const currentLineRef = useRef<number>(0);
 
   const [txtInput, setTxtInput] = useState("");
+  const [focus, setFocus] = useState(true);
 
   const data = useDataStore((state) => state.data);
   const setData = useDataStore((state) => state.setData);
@@ -104,9 +105,9 @@ const Input = () => {
     });
   }, [addOnResetFunc, setData])
 
-  // useEffect(() => {
-  //   console.count('counter');
-  // })
+  useEffect(() => {
+    console.log(inputRef.current === document.activeElement);
+  })
 
   return (
     <>
@@ -121,7 +122,7 @@ const Input = () => {
                     className={
                       data[id].status === "correct" ? "bg-green-400" : 
                       data[id].status === "incorrect" ? "bg-red-400" : 
-                      data[id].status === "current" ? "animate-cursorBlink" : ""
+                      data[id].status === "current" && focus ? "animate-cursorBlink" : ""
                     }
                   >{ data[id].letter }</span>
                 )
@@ -141,6 +142,8 @@ const Input = () => {
             timer.start();
           }
         }}
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
       />
     </>
     
